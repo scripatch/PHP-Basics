@@ -4,9 +4,10 @@
         <input type='password' name='pass' placeholder='Пароль'>
         Save? <input type='checkbox' name='save'>
         <input type='submit' name='send'>
+        <input type="hidden" name='redirect' value="<?=$_SERVER['REQUEST_URI']?>">
     </form>
 <?else:?>
-    Добро пожаловать, <?=$user?> <a href='/auth/logout/'>выход</a><br>
+    Добро пожаловать, <?=$user?> <a href='/auth/logout/?redirect=<?=$_SERVER['REQUEST_URI']?>'>выход</a><br>
 <?endif;?>
 
 <a href="/">Главная</a>

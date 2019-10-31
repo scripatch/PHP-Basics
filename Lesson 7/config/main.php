@@ -5,10 +5,10 @@ define("LAYOUTS_DIR", 'layout/');
 
 
 /* DB config */
-define('HOST', 'localhost');
-define('USER', 'root');
-define('PASS', '');
-define('DB', 'shop2');
+define('HOST', 'db');
+define('USER', 'local');
+define('PASS', 'local');
+define('DB', 'local');
 
 const ERR_CODE = [
     null => "",

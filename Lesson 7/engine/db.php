@@ -16,6 +16,20 @@ function getDb() {
 
     if (is_null($db)) {
         $db = @mysqli_connect(HOST, USER, PASS, DB) or die("Could not connect: " . mysqli_connect_error());
+
+        //Автоматическая загрузка дампа в БД
+        $result = mysqli_query($db, "SHOW TABLES FROM " . DB . ";");
+        if (mysqli_num_rows($result) === 0) {
+            $dump = file_get_contents("../data/shop.sql");
+            $a = 0;
+            while ($b = strpos($dump, ";", $a + 1)) {
+                $a = substr($dump, $a + 1, $b - $a);
+                mysqli_query($db, $a);
+                $a = $b;
+            }
+            var_dump("Дамп загружен!");
+        }
+
     }
 
     return $db;
