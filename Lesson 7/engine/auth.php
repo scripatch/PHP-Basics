@@ -1,21 +1,9 @@
 <?php
 
 
-
-
-
-function get_db()
-{
-    static $db = '';
-    if (empty($db)) {
-        $db = mysqli_connect('localhost', 'root', '', 'test');
-    }
-    return $db;
-}
-
 function auth($login, $pass)
 {
-    $db = get_db();
+    $db = getDb();
     $login = mysqli_real_escape_string($db, strip_tags(stripslashes($login)));
     /*
         $options = [
@@ -38,7 +26,7 @@ function is_auth()
 {
     if (isset($_COOKIE["hash"])) {
         $hash = $_COOKIE["hash"];
-        $db = get_db();
+        $db = getDb();
         $sql = "SELECT * FROM `users` WHERE `hash`='{$hash}'";
         $result = mysqli_query($db, $sql);
         $row = mysqli_fetch_assoc($result);

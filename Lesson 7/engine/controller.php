@@ -10,28 +10,27 @@ function prepareVariables($page, $action, $id)
 //Для каждой страницы готовим массив со своим набором переменных
 //для подстановки их в соотвествующий шаблон
     $params = ["count" => getBasketCount()];
-    /*
+
     if (is_auth()) {
         $params['allow'] = true;
         $params['user'] = get_user();
     }
-*/
 
 
     switch ($page) {
 
         case 'auth':
             if ($action == "login") {
-                if (isset($_GET['send'])) {
-                    $login = $_GET['login'];
-                    $pass = $_GET['pass'];
+                if (isset($_POST['send'])) {
+                    $login = $_POST['login'];
+                    $pass = $_POST['pass'];
 
                     if (!auth($login, $pass)) {
                         Die('Не верный логин пароль');
                     } else {
-                        if (isset($_GET['save'])) {
+                        if (isset($_POST['save'])) {
                             $hash = uniqid(rand(), true);
-                            $db = get_db();
+                            $db = getDb();
                             $id = mysqli_real_escape_string($db, strip_tags(stripslashes($_SESSION['id'])));
                             $sql = "UPDATE `users` SET `hash` = '{$hash}' WHERE `users`.`id` = {$id}";
                             $result = mysqli_query($db, $sql);
@@ -41,35 +40,43 @@ function prepareVariables($page, $action, $id)
                         $allow = true;
                         $user = get_user();
 
-
+                        header("Location: " . $_POST['redirect']);
                     }
                 }
                 exit;
             }
 
+            if ($action == 'logout') {
+                session_destroy();
+                setcookie("hash");
+                header("Location: " . $_GET['redirect']);
+                exit;
+            }
+
+            exit;
             break;
 
-        case 'logout':
-            session_destroy();
-            setcookie("hash");
-            header("Location: /");
-            break;
 
         //api/buy/5
         case 'api':
             if ($action == "buy") {
-               //addToBasket($id);
-                //var_dump($id);
-                echo json_encode(["result" => 1, "count" => getBasketCount()]);
+                if (addToBasket($id)) {
+                    echo json_encode(["result" => 1, "count" => getBasketCount()]);
+                } else {
+                    echo json_encode(["result" => -1]);
+                }
                 exit;
             }
             if ($action == "delete") {
-                //deleteFromBasket($id);
-
-                echo json_encode(["result" => 1, "count" => getBasketCount()]);
+                if (deleteFromBasket($id)) {
+                    echo json_encode(["result" => 1, "count" => getBasketCount()]);
+                } else {
+                    echo json_encode(["result" => -1]);
+                }
                 exit;
                 }
-
+            exit;
+            break;
 
         case 'news':
 
@@ -108,7 +115,7 @@ function prepareVariables($page, $action, $id)
             break;
 
         case 'basket':
-            $params['good'] = getBasket();
+            $params['goods'] = getBasket();
             break;
     }
 
