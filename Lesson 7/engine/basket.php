@@ -19,8 +19,7 @@ function getBasketCount() {
 }
 
 function addToBasket($id) {
-    $db = getDb();
-    $id = mysqli_real_escape_string($db, strip_tags(htmlspecialchars($id)));
+    $id = (int) $id;
     $session_id = session_id();
     $sql = "INSERT INTO `basket`(`session_id`,`goods_id`) VALUES ('{$session_id}', '{$id}')";
     $result = executeQuery($sql);
@@ -29,8 +28,7 @@ function addToBasket($id) {
 }
 
 function deleteFromBasket($id) {
-    $db = getDb();
-    $id = mysqli_real_escape_string($db, strip_tags(htmlspecialchars($id)));
+    $id = (int) $id;
     $session_id = session_id();
     $sql = "DELETE FROM `basket` WHERE session_id = '{$session_id}' AND id = '{$id}'";
     $result = executeQuery($sql);
