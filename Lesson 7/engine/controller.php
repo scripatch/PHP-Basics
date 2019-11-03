@@ -14,6 +14,9 @@ function prepareVariables($page, $action, $id)
     if (is_auth()) {
         $params['allow'] = true;
         $params['user'] = get_user();
+    } else {
+        $params['allow'] = false;
+        $params['user'] = false;
     }
 
 
@@ -29,16 +32,8 @@ function prepareVariables($page, $action, $id)
                         Die('Не верный логин пароль');
                     } else {
                         if (isset($_POST['save'])) {
-                            $hash = uniqid(rand(), true);
-                            $db = getDb();
-                            $id = mysqli_real_escape_string($db, strip_tags(stripslashes($_SESSION['id'])));
-                            $sql = "UPDATE `users` SET `hash` = '{$hash}' WHERE `users`.`id` = {$id}";
-                            $result = mysqli_query($db, $sql);
-                            setcookie("hash", $hash, time() + 3600);
-
+                            saveCredentials();
                         }
-                        $allow = true;
-                        $user = get_user();
 
                         header("Location: " . $_POST['redirect']);
                     }
@@ -74,7 +69,7 @@ function prepareVariables($page, $action, $id)
                     echo json_encode(["result" => -1]);
                 }
                 exit;
-                }
+            }
             exit;
             break;
 
@@ -85,12 +80,6 @@ function prepareVariables($page, $action, $id)
             break;
 
         case 'newspage':
-            //пример асинхронного обработчика лайков к новостям
-            if ($action=="addlike") {
-                //обращаемся к модели и ставим лайк
-                $result = addNewsLike($id);
-                echo json_encode(["result" => $result]);
-            }
 
             $content = getNewsContent($id);
             $params['prev'] = $content['prev'];
