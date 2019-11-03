@@ -36,3 +36,13 @@ function deleteFromBasket($id) {
     return $result;
 
 }
+
+function getBasketAmount() {
+    //Запрос на количество товаров в корзине
+    $session_id = session_id();
+    $sql ="SELECT SUM(goods.price) as 'sum' FROM basket LEFT JOIN goods ON basket.goods_id = goods.id WHERE `session_id` = '{$session_id}'";
+    $result = getAssocResult($sql)[0];
+
+    if (mysqli_affected_rows(getDb()) != 1) return false;
+    return $result['sum'];
+}

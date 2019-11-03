@@ -33,10 +33,8 @@ function getAllFeedback() {
 }
 
 function doFeedbackAction(&$params, $action, $id) {
-    //$errorsArr = include "../config/errors.php";
-    //$params['error'] = $errorsArr[$_GET['status']];
-    $params['error'] = ERR_CODE[$_GET['status']];
 
+    $params['error'] = ERR_CODE[$_GET['status']];
 
     //значения по умолчанию
     $params['action'] = "add";

@@ -24,7 +24,7 @@ function renderTamplate($page, $params = [])
     }
 
 
-    $fileName = TEMLATES_DIR . $page . '.php';
+    $fileName = TEMPLATES_DIR . $page . '.php';
 
     if (file_exists($fileName)) {
         include $fileName;

@@ -64,13 +64,44 @@ function prepareVariables($page, $action, $id)
             }
             if ($action == "delete") {
                 if (deleteFromBasket($id)) {
-                    echo json_encode(["result" => 1, "count" => getBasketCount()]);
+                    echo json_encode([
+                        "result" => 1,
+                        "count" => getBasketCount(),
+                        "sum" => getBasketAmount()]);
                 } else {
                     echo json_encode(["result" => -1]);
                 }
                 exit;
             }
+            if ($action == "checkout") {
+
+                if (checkoutOrder($id)) {
+                    echo json_encode(["result" => 1]);
+                } else
+                    echo json_encode(["result" => -11]);
+                exit;
+            }
+            if ($action == "cancel") {
+                if (cancelOrder($id)) {
+                    echo json_encode(["result" => 1]);
+                } else
+                    echo json_encode(["result" => -11]);
+                exit;
+            }
             exit;
+            break;
+
+        case 'admin':
+            $params['items'] = getOrders();
+            break;
+
+        case 'order':
+            if (isset($_POST['checkout'])) {
+                $params["message"] = createOrder($_POST['name'], $_POST['phone'], $_POST['address']);
+            } else {
+                $params["message"] = "Ошибка при оформлении заказа. Попробуйте заново.";
+            }
+
             break;
 
         case 'news':
@@ -105,6 +136,7 @@ function prepareVariables($page, $action, $id)
 
         case 'basket':
             $params['goods'] = getBasket();
+            $params['sum'] = getBasketAmount();
             break;
     }
 

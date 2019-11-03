@@ -9,6 +9,18 @@
     </div>
 <? endforeach; ?>
 
+Общая стоимость: <span id="sum"><?=$sum?></span><br>
+
+<h2>Оформите заказ</h2>
+<form action="/order/" method="post">
+    <input placeholder="Ваше имя" type="text" name="name">
+    <input placeholder="Телефон" type="text" name="phone">
+    <input placeholder="Адрес доставки" type="text" name="address">
+    <input type="submit" name="checkout">
+</form>
+
+
+
 <script>
     let buttons = document.querySelectorAll('.buy');
 
@@ -19,6 +31,7 @@
                 const response = await fetch('/api/delete/'+id);
                 const answer = await response.json();
                 document.getElementById('count').innerText = answer.count;
+                document.getElementById('sum').innerText = answer.sum;
                 console.log(document.getElementById(id));
                 document.getElementById(id).remove();
             })();

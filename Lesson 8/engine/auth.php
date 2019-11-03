@@ -1,6 +1,12 @@
 <?php
 
 
+function is_admin() {
+    if ($_SESSION['login'] == 'admin') {
+        return true;
+    } else return false;
+}
+
 function auth($login, $pass)
 {
     $db = getDb();

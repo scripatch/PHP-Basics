@@ -1,7 +1,8 @@
 <?php
 //Файл констант
-define("TEMLATES_DIR", '../views/');
+define("TEMPLATES_DIR", '../views/');
 define("LAYOUTS_DIR", 'layout/');
+define("ENGINE_DIR", '../engine/');
 
 
 /* DB config */
@@ -20,15 +21,13 @@ const ERR_CODE = [
     "UPDATED" => "Отзыв изменен!"
 ];
 
+const ORDER_STATUS = [
+    1 => "Новый",
+    2 => "Оформлен",
+    3 => "Отменен"
+];
+
 //Тут же подключим основные функции нашего приложения, пока это render
 //Можете кстати подключить и в главном index.php если такая вложенность напрягает
-include_once "../engine/controller.php";
-include_once "../engine/core.php";
-include_once "../engine/log.php";
-include_once "../engine/db.php";
-include_once "../engine/news.php";
-include_once "../engine/feedback.php";
-include_once "../engine/basket.php";
-include_once "../engine/goods.php";
-include_once "../engine/auth.php";
+include_once "../engine/lib_autoload.php";
 
