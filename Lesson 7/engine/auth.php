@@ -43,3 +43,11 @@ function get_user()
     return is_auth() ? $_SESSION['login'] : false;
 }
 
+function saveCredentials() {
+    $hash = uniqid(rand(), true);
+    $db = getDb();
+    $id = (int) $_SESSION['id'];
+    $sql = "UPDATE `users` SET `hash` = '{$hash}' WHERE `users`.`id` = {$id}";
+    $result = mysqli_query($db, $sql);
+    setcookie("hash", $hash, time() + 3600);
+}
